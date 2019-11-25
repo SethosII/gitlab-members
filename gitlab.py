@@ -21,7 +21,7 @@ def project_members(project_name, indent_level):
     response = requests.get(url, headers=headers)
 
     for member in response.json():
-        print(' ' * indent * indent_level, 'member -', member['id'], '-', member['username'])
+        print(' ' * indent * indent_level, 'member -', member['id'], '-', member['username'], '-', member['access_level'])
 
 
 def group_members(group_name, indent_level):
@@ -29,7 +29,7 @@ def group_members(group_name, indent_level):
     response = requests.get(url, headers=headers)
 
     for member in response.json():
-        print(' ' * indent * indent_level, 'member -', member['id'], '-', member['username'])
+        print(' ' * indent * indent_level, 'member -', member['id'], '-', member['username'], '-', member['access_level'])
 
 
 def group_projects(group_name, indent_level):
