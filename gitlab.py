@@ -53,9 +53,10 @@ def navigate_subgroups(group_name, indent_level):
 
 if __name__ == '__main__':
     token = sys.argv[1]
-    root_group = sys.argv[2]
 
     headers['Private-Token'] = token
 
-    print('root group -', root_group)
-    navigate_subgroups(root_group, 1)
+    response = requests.get('https://gitlab.com/api/v4/groups/', headers=headers)
+    for group in response.json():
+        print('root group -', group['full_path'])
+        navigate_subgroups(group['full_path'], 1)
