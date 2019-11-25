@@ -6,6 +6,8 @@ import sys
 
 import requests
 
+api = '/api/v4/'
+baseurl = ''
 headers = {}
 indent = 4
 
@@ -15,7 +17,7 @@ def encode(name):
 
 
 def project_members(project_name, indent_level):
-    url = 'https://gitlab.com/api/v4/projects/{}/members'.format(encode(project_name))
+    url = baseurl + api + '/projects/{}/members'.format(encode(project_name))
     response = requests.get(url, headers=headers)
 
     for member in response.json():
@@ -23,7 +25,7 @@ def project_members(project_name, indent_level):
 
 
 def group_members(group_name, indent_level):
-    url = 'https://gitlab.com/api/v4/groups/{}/members'.format(encode(group_name))
+    url = baseurl + api + '/groups/{}/members'.format(encode(group_name))
     response = requests.get(url, headers=headers)
 
     for member in response.json():
@@ -31,7 +33,7 @@ def group_members(group_name, indent_level):
 
 
 def group_projects(group_name, indent_level):
-    url = 'https://gitlab.com/api/v4/groups/{}/projects'.format(encode(group_name))
+    url = baseurl + api + '/groups/{}/projects'.format(encode(group_name))
     response = requests.get(url, headers=headers)
 
     for project in response.json():
@@ -43,7 +45,7 @@ def navigate_subgroups(group_name, indent_level):
     group_members(group_name, indent_level)
     group_projects(group_name, indent_level)
 
-    url = 'https://gitlab.com/api/v4/groups/{}/subgroups'.format(encode(group_name))
+    url = baseurl + api + '/groups/{}/subgroups'.format(encode(group_name))
     response = requests.get(url, headers=headers)
 
     for subgroup in response.json():
@@ -53,10 +55,11 @@ def navigate_subgroups(group_name, indent_level):
 
 if __name__ == '__main__':
     token = sys.argv[1]
+    baseurl = sys.argv[2]
 
     headers['Private-Token'] = token
 
-    response = requests.get('https://gitlab.com/api/v4/groups/', headers=headers)
+    response = requests.get(baseurl + api + '/groups/', headers=headers)
     for group in response.json():
         print('root group -', group['full_path'])
         navigate_subgroups(group['full_path'], 1)
